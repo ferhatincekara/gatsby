@@ -166,6 +166,9 @@ const filterWithoutSift = (filters, nodeTypeNames, filtersCache) => {
       b.length - a.length
   )
 
+  // All elements of nodesPerValueArrs should be sorted by counter and deduped
+  // So if there's only one bucket in this list the next loop is skipped
+
   if (nodesPerValueArrs.length === 1) {
     // If there's only one bucket then we have to run it against itself to
     // make sure it doesn't contain dupes. Otherwise the deduping would
@@ -271,7 +274,8 @@ const getBucketsForQueryFilter = (
   const nodesPerValue /*: Array<IGatsbyNode> | undefined */ = getNodesFromCacheByValue(
     filterCacheKey,
     filterValue,
-    filtersCache
+    filtersCache,
+    false
   )
 
   // If we couldn't find the needle then maybe sift can, for example if the
@@ -331,7 +335,8 @@ const collectBucketForElemMatch = (
   const nodesByValue /*: Array<IGatsbyNode> | undefined*/ = getNodesFromCacheByValue(
     filterCacheKey,
     targetValue,
-    filtersCache
+    filtersCache,
+    true
   )
 
   // If we couldn't find the needle then maybe sift can, for example if the
